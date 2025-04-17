@@ -1,11 +1,10 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import Task from './components/Task.vue';
 
 const appName = ref("My new task manager");
 
-console.log(appName.value);
-
-const tasks= [
+let tasks = reactive([
     {
       name: "Website design",
       description: "Define the style guide, branding and create the webdesign on Figma.",
@@ -41,7 +40,18 @@ const tasks= [
       description: "Open a bank account for my freelance business.",
       completed: false
     }
-];
+]);
+
+let newTask = {completed: false};
+
+function addTask(){
+  if(newTask.name && newTask.description) {
+    tasks.push(newTask);
+    newTask = {completed: false};
+  } else {
+    alret("Please enter the title and description for the task.");
+  }
+}
 
 </script>
 
@@ -76,50 +86,20 @@ const tasks= [
 
     <div class="tasks">
       
-      <div class="task">
-        <h3>
-          Website design
-        </h3>
-        <p>
-          Define the style guide, branding and create the webdesign on Figma.
-        </p>
-        <div class="task-check">
-          <input type="checkbox" checked />
-          <label>
-            Done
-          </label>
-        </div>
-      </div>
-
-      <div class="task">
-        <h3>
-          Website development
-        </h3>
-        <p>
-          Develop the portfolio website using Vue JS.
-        </p>
-        <div class="task-check">
-          <input type="checkbox"/>
-          <label>
-            To-Do
-          </label>
-        </div>
-      </div>
+      <Task v-for="(task, index) in tasks" :task="task" :key="index"/>
 
     </div>
 
     <div class="add-task">
       <h3>Add a new task</h3>
-      <input type="text" name="title" placeholder="Enter a title..."><br />
-      <textarea name="description" rows="4" placeholder="Enter a description..." /><br />
-      <button class="btn gray">Add Task</button>
+      <input v-model="newTask.name" type="text" name="title" placeholder="Enter a title..."><br />
+      <textarea v-model="newTask.description" name="description" rows="4" placeholder="Enter a description..." /><br />
+      <button @click="addTask" class="btn gray">Add Task</button>
 
     </div>
 
   </main>
   
-   
-
 </template>
 
 
@@ -192,83 +172,6 @@ const tasks= [
   }
 }
 
-.task {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--white-color);
-  color: var(--black-color);
-  padding: 20px;
-  border-radius: 12px;
-  position: relative;
-
-
-  h3 {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-
-  p {
-    margin-top: 24px;
-    margin-bottom: 12px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-
-
-  .task-check {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-
-    label {
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 16px;
-      letter-spacing: 0em;
-      text-align: left;
-      margin-left: 5px;
-      cursor: pointer;
-    }
-
-    input {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 18px;
-      height: 18px;
-      border-radius: 100%;
-      border: 0.77px solid #AEAEB2;
-      appearance: none;
-      cursor: pointer;
-
-
-      &:checked {
-        background-color: #0A7AFF;
-        border-color: #0A7AFF;
-
-        &::before {
-          content: '';
-          display: block;
-          width: 4.5px;
-          height: 9px;
-          border: solid white;
-          border-width: 0 2px 2px 0;
-          transform: rotate(45deg);
-        }
-      }
-    }
-  }
-}
-
 .add-task {
   margin-top: 60px;
 
@@ -284,6 +187,5 @@ const tasks= [
     margin-top: 12px;
   }
 }
-
 
 </style>
