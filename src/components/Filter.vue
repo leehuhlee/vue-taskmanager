@@ -7,10 +7,10 @@ const props = defineProps(['filterBy']);
     <div>
       <p>Filter by state</p>
       <div class="badges">
-        <div @click="$emit('setFilter', 'todo')" class="badge" :class="{selected : filterBy === 'todo'}">
+        <div @click="$emit('setFilter', 'todo')" class="badge" :class="{ selected: filterBy === 'todo' }">
           To-Do
         </div>
-        <div @click="$emit('setFilter', 'done')" class="badge" :class="{selected : filterBy === 'done'}">
+        <div @click="$emit('setFilter', 'done')" class="badge" :class="{ selected: filterBy === 'done' }">
           Done
         </div>
         <span @click="$emit('setFilter', '')" v-if="filterBy" class="clear">
@@ -54,7 +54,7 @@ const props = defineProps(['filterBy']);
       border-radius: 8px;
       cursor: pointer;
       user-select: none;
-    
+
       &.selected {
         background-color: #E42C5F;
         color: var(--white-color);

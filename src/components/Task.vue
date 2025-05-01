@@ -1,7 +1,5 @@
 <script setup>
-
-  const props = defineProps(['task']);
-
+const props = defineProps(['task']);
 </script>
 
 <template>
@@ -49,7 +47,6 @@
     letter-spacing: 0em;
     text-align: left;
   }
-
 
   .task-check {
     display: flex;
