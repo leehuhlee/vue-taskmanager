@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import Task from './components/Task.vue';
 import Filter from './components/Filter.vue';
 import ModalWindow from './components/modal/ModalWindow.vue';
@@ -8,42 +8,6 @@ import { useTasksStore } from './stores/tasksStore.js';
 
 const appName = ref("My new task manager");
 const store = useTasksStore();
-let filterBy = ref("");
-let modalIsActive = ref(false);
-let newTask = { completed: false };
-
-const filteredTasks = computed(() => {
-  switch (filterBy.value) {
-    case 'todo':
-      return store.tasks.filter(task => !task.completed);
-    case 'done':
-      return store.tasks.filter(task => task.completed)
-    default:
-      return store.tasks;
-  }
-})
-
-function addTask() {
-  if (newTask.name && newTask.description) {
-    newTask.id = Math.max(...store.tasks.map(task => task.id)) + 1;
-    store.tasks.push(newTask);
-    newTask = { completed: false };
-  } else {
-    alret("Please enter the title and description for the task.");
-  }
-}
-
-function toggleCompleted(id) {
-  store.tasks.forEach(task => {
-    if (task.id === id) {
-      task.completed = !task.completed;
-    }
-  });
-}
-
-function setFilter(value) {
-  filterBy.value = value;
-}
 </script>
 
 <template>
@@ -55,18 +19,18 @@ function setFilter(value) {
         </h1>
       </div>
       <div class="header-side">
-        <button @click="modalIsActive = true" class="btn secondary">+ Add Task</button>
+        <button @click="store.openModal()" class="btn secondary">+ Add Task</button>
       </div>
       <input type="text" v-model="appName">
     </div>
 
-    <Filter :filterBy="filterBy" @setFilter="setFilter" />
+    <Filter/>
 
     <div class="tasks">
-      <Task @toggleCompleted="toggleCompleted" v-for="(task, index) in filteredTasks" :task="task" :key="index" />
+      <Task v-for="(task, index) in store.filteredTasks" :task="task" :key="index" />
     </div>
 
-    <ModalWindow @closePopup="modalIsActive = false" v-if="modalIsActive">
+    <ModalWindow @closePopup="store.closeModal()" v-if="store.modalIsActive">
       <AddTaskModal/>
     </ModalWindow>
   </main>
